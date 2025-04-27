@@ -15,9 +15,6 @@ initialCards.forEach(function (cardData) {
   placesList.append(currentCard);
 });
 
-
-//все попапы
-const dialogElement = document.querySelectorAll('.popup');
 //элементы форм
 const dialogEdit = document.querySelector('.popup_type_edit');
 const dialogAddProfile = document.querySelector('.popup_type_new-card');
@@ -73,18 +70,6 @@ profileEditBtn.addEventListener('click', () => {
 //слушатель на кнокпе "добавить картинку"
 profileAddBtn.addEventListener('click', () => {
   openModal(dialogAddProfile);
-});
-
-
-//закрывает попап кликом (варианты)
-dialogElement.forEach((popup) => {
-  popup.addEventListener('click', (evt) => {
-    if(evt.target.classList.contains('popup__close') 
-        || evt.target.classList.contains('popup') 
-      || evt.target.classList.contains('popup__button')) { 
-      closeModal(popup);
-    }
-  })
 });
 
 //элементы формы редактирования
