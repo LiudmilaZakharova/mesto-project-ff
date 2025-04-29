@@ -10,9 +10,10 @@ function createCard (cardData, clickDelete, clickImg, clickLike) {
 
   cardName.textContent = cardData.name;
   cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
 
   deleteButton.addEventListener('click', () => clickDelete(placesItem));
-  cardImage.addEventListener('click', clickImg);
+  cardImage.addEventListener('click', () => clickImg({ name: cardData.name, link: cardData.link }));
   cardLikeButton.addEventListener('click', () => clickLike(cardLikeButton));
 
   return placesItem;

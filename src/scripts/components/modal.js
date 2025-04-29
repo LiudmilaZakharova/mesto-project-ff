@@ -1,6 +1,3 @@
-// import {dialogElement} from '../index'
-// import {closeByEsc} from '../index'
-
 function openModal(element) {
   element.classList.add('popup_is-opened');
   document.addEventListener('keydown', closeByEsc);
@@ -11,7 +8,7 @@ function closeByEsc(evt) {
     const openedPopup = document.querySelector('.popup_is-opened');
     closeModal(openedPopup); 
   }
-}  
+};
 
 
 function closeModal(element) {
