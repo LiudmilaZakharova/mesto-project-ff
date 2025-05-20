@@ -60,7 +60,6 @@ Promise.all([profileData(), initialCards()])
     userName.textContent = userData.name;
     userJob.textContent = userData.about;
     userId = userData._id;
-    console.log([userData, cards]);
     cards.forEach(function (cardData) {
       const allowDelete = (userId == cardData.owner._id);
       // CASE B
