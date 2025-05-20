@@ -19,6 +19,24 @@
   cursor: pointer;
 }
 
+.popup__button_disabled {
+  color: rgba(0, 0, 0, 0.2);
+  background: none;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.popup__button_disabled:hover {
+  color: rgba(0, 0, 0, 0.2);
+  background: none;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.2);
+  cursor: default;
+}
+
+.popup_type_delete-card__button {
+  margin-top: 38px;
+}
+
 @media screen and (max-width: 568px) {
   .popup__button {
     font-size: 14px;
