@@ -81,7 +81,7 @@ function openCardFunc({ name, link }) {
 // сохраняем новую карточку
 function handleImgSubmit(evt) {
   evt.preventDefault();
-  savingButtonText(dialogNewCard);
+  renderLoading (dialogNewCard, false, "Сохранение...");
   const newCardData = {
     name: placeInput.value,
     link: linkInput.value
@@ -93,13 +93,13 @@ function handleImgSubmit(evt) {
       placesList.prepend(newCard);  
       formAddCards.reset();
       closeModal(dialogNewCard);
-      saveButtonText(dialogNewCard);
+      renderLoading (dialogNewCard, true, "Сохранить");
     })
     .catch((err) => {
       console.log("Ошибка. Запрос не выполнен", err);
     })
     .finally (() => {
-      saveButtonText(dialogNewCard);
+      renderLoading (dialogNewCard, true, "Сохранить");
     });
 };
 
@@ -120,19 +120,19 @@ profileImgEditButton.addEventListener("click", () => {
 // редактирование аватарки
 function handleAvatarSubmit(evt) {
   evt.preventDefault();
-  savingButtonText(dialogAvatarEdit);
+  renderLoading (dialogAvatarEdit, false, "Сохранение...");
   const profileAvatarLink = {avatar: avatarLinkInput.value};
   editAvatarApi(profileAvatarLink)
   .then((res) => {
       userAvatar.style.backgroundImage = `url(${res.avatar})`;
       closeModal(dialogAvatarEdit);
-      saveButtonText(dialogAvatarEdit);
+      renderLoading (dialogAvatarEdit, true, "Сохранить");
   })
   .catch((err) => {
       console.log("Ошибка. Запрос не выполнен", err);
   })
   .finally (() => {
-      saveButtonText(dialogNewCard);
+      renderLoading (dialogAvatarEdit, true, "Сохранить");
   });
 };
 
@@ -141,7 +141,7 @@ formEditAvatar.addEventListener("submit", handleAvatarSubmit);
 // сохраняем введенные данные
 function handleFormEditSubmit(evt) {
   evt.preventDefault();
-  savingButtonText(dialogEdit);
+  renderLoading (dialogEdit, false, "Сохранение...");
 
   const dataEditForm = {
     name: nameProfileInput.value,
@@ -154,13 +154,13 @@ function handleFormEditSubmit(evt) {
     })
     .then(() => {
       closeModal(dialogEdit);
-      saveButtonText(dialogEdit);
+      renderLoading (dialogEdit, true, "Сохранить");
     })
     .catch((err) => {
       console.log("Ошибка. Запрос не выполнен", err);
     })
     .finally (() => {
-      saveButtonText(dialogNewCard);
+      renderLoading (dialogEdit, true, "Сохранить");
     });
 };
 
@@ -209,10 +209,14 @@ function handleDeleteCard (cardElement, cardId) {
   openModal(dialogDeleteCard);
 };
 
-const savingButtonText = (element) => { 
-  element.querySelector('.popup__button').textContent = "Сохранение..." 
-}; 
 
-const saveButtonText = (element) => { 
-  element.querySelector('.popup__button').textContent = "Сохранить" 
-}; 
+// меняем текст на кнопке сохранения
+function renderLoading (element, isActive, elementText) {
+  const buttnSave = element.querySelector('.popup__button');
+  buttnSave.textContent = elementText;
+  if (isActive) {
+    buttnSave.removeAttribute('disabled');
+  } else {
+    buttnSave.setAttribute('disabled', 'true');
+  }
+}
