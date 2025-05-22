@@ -197,22 +197,29 @@ popupList.forEach((popup) => {
   });
 });
 
-  // удаляем карточку
-  function handleDeleteCard (cardElement, cardId) {
-    idCardForDelete = cardId;
-    cardForDelete = cardElement;
-    openModal(dialogDeleteCard);
 
-  deleteCardButton.addEventListener("click", () => {
-    deleteCardApi(idCardForDelete)
-      .then((res) => {
-       deleteCardFunc(cardForDelete);
-      })
-      .catch((err) => {
-       console.log("Ошибка. Запрос не выполнен", err);
-      });
-    closeModal(dialogDeleteCard)});
-  };
+// Слушатель на подтверждение удаления карточки
+deleteCardButton.addEventListener("click", () => {
+  console.log("deleteCardApi(idCardForDelete)");
+  deleteCardApi(idCardForDelete)
+    .then(() => {
+      deleteCardFunc(cardForDelete);
+      closeModal(dialogDeleteCard);
+      idCardForDelete = null;
+      cardForDelete = null;
+    })
+    .catch((err) => {
+      console.log("Ошибка. Запрос не выполнен", err);
+    });
+});
+
+
+// Инициализация удаления карточки
+function handleDeleteCard (cardElement, cardId) {
+  idCardForDelete = cardId;
+  cardForDelete = cardElement;
+  openModal(dialogDeleteCard);
+};
 
   // Ставим лайки
   function handleLikeCard(cardId, cardLikeButton, cardLikeCount) {
