@@ -1,10 +1,10 @@
 import "../pages/index.css";
-import { createCard, deleteCardFunc, likeButtonClick } from "./components/card.js";
+import { createCard, deleteCardFunc, downLike, setLikeCounter } from "./components/card.js";
 import { openModal, closeModal } from "./components/modal.js";
 // import {initialCards} from './components/cards.js';
 import { validationConfig } from "./components/config.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
-import { profileData, initialCards, editProfileApi, newCardApi, deleteCardApi, editAvatarApi } from "./components/api.js";
+import { profileData, initialCards, editProfileApi, newCardApi, deleteCardApi, editAvatarApi, likeCardApi, dislikeCardApi } from "./components/api.js";
 
 const placesList = document.querySelector(".places__list");
 
@@ -61,7 +61,7 @@ Promise.all([profileData(), initialCards()])
     userJob.textContent = userData.about;
     userId = userData._id;
     cards.forEach(function (cardData) {
-      const currentCard = createCard(cardData, handleDeleteCard, openCardFunc, likeButtonClick, userId);
+      const currentCard = createCard(cardData, handleDeleteCard, openCardFunc, handleLikeCard, userId);
       placesList.append(currentCard);
     });
   })
@@ -89,7 +89,7 @@ function handleImgSubmit(evt) {
 
   newCardApi(newCardData)
     .then((res) => {
-      const newCard = createCard(res, handleDeleteCard, openCardFunc, likeButtonClick, userId);
+      const newCard = createCard(res, handleDeleteCard, openCardFunc, handleLikeCard, userId);
       placesList.prepend(newCard);  
       formAddCards.reset();
       closeModal(dialogNewCard);
@@ -132,7 +132,7 @@ function handleAvatarSubmit(evt) {
       console.log("Ошибка. Запрос не выполнен", err);
   })
   .finally (() => {
-      saveButtonText(dialogNewCard);
+      saveButtonText(dialogAvatarEdit);
   });
 };
 
@@ -160,7 +160,7 @@ function handleFormEditSubmit(evt) {
       console.log("Ошибка. Запрос не выполнен", err);
     })
     .finally (() => {
-      saveButtonText(dialogNewCard);
+      saveButtonText(dialogEdit);
     });
 };
 
@@ -209,6 +209,22 @@ function handleDeleteCard (cardElement, cardId) {
   openModal(dialogDeleteCard);
 };
 
+// Обработка нажатия кнопки Like
+function handleLikeCard(cardId, cardLikeButton, cardLikeCount) {
+  const isLikeActivated = downLike(cardLikeButton);
+  
+  const res_promise = (isLikeActivated) ? likeCardApi(cardId) : dislikeCardApi(cardId);
+  res_promise
+    .then((res) => { 
+      setLikeCounter(cardLikeCount, res.likes.length);
+    })
+    .catch((err) => {
+      console.log("Ошибка. Запрос не выполнен", err);
+      downLike(cardLikeButton);
+    });
+};
+
+//меняем текст кнопки сохранения
 const savingButtonText = (element) => { 
   element.querySelector('.popup__button').textContent = "Сохранение..." 
 }; 

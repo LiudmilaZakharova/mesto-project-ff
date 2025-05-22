@@ -35,21 +35,17 @@ function createCard (cardData, clickDelete, clickImg, clickLike, userId) {
   return placesItem;
 };
 
-
-// Обработка нажатия кнопки Like
-function likeButtonClick(cardId, cardLikeButton, cardLikeCount) {
+// меняем состояние кнопки лайка
+function downLike (cardLike) {
   const targetClass = "card__like-button_is-active";
-  const isLikeActivated = cardLikeButton.classList.contains(targetClass);
-  
-  const res_promise = (isLikeActivated) ? dislikeCardApi(cardId) : likeCardApi(cardId);
-  res_promise
-    .then((res) => { 
-      cardLikeButton.classList.toggle(targetClass);
-      cardLikeCount.textContent = res.likes.length;
-    })
-    .catch((err) => {
-      console.log("Ошибка. Запрос не выполнен", err);
-    });
+  cardLike.classList.toggle(targetClass);
+  // Возвращает true если кнопка активна, иначе false
+  return cardLike.classList.contains("card__like-button_is-active");
+};
+
+// меняем счетчик лайков
+function setLikeCounter (cardLikeCount, likesNum) { 
+  cardLikeCount.textContent = likesNum;
 };
 
 // Функция удаления карточки с формы
@@ -58,4 +54,4 @@ function deleteCardFunc (cardElement) {
 };
 
 // export { createCard, deleteCardFunc, downLike };
-export { createCard, deleteCardFunc, likeButtonClick };
+export { createCard, deleteCardFunc, downLike, setLikeCounter };
