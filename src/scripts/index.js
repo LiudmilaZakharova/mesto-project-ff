@@ -1,5 +1,5 @@
 import "../pages/index.css";
-import { createCard, deleteCardFunc, downLike } from "./components/card.js";
+import { createCard, deleteCardFunc, likeButtonClick } from "./components/card.js";
 import { openModal, closeModal, savingButtonText, saveButtonText } from "./components/modal.js";
 // import {initialCards} from './components/cards.js';
 import { validationConfig } from "./components/config.js";
@@ -61,20 +61,8 @@ Promise.all([profileData(), initialCards()])
     userJob.textContent = userData.about;
     userId = userData._id;
     cards.forEach(function (cardData) {
-      const allowDelete = (userId == cardData.owner._id);
-      // CASE B
-      const isLiked = cardData.likes.map(
-        function (likeObj) {return likeObj._id;}).includes(userData._id);
-      // CASE A
-      // let isLiked = false;// cardData.likes.includes(userId);
-      // cardData.likes.forEach(function (likeObj) {
-      //   if (likeObj._id == userData._id)
-      //   {
-      //     isLiked = true;
-      //   }
-      // })
-    const currentCard = createCard(cardData, handleDeleteCard, openCardFunc, handleLikeCard, allowDelete, isLiked);
-    placesList.append(currentCard);
+      const currentCard = createCard(cardData, handleDeleteCard, openCardFunc, likeButtonClick, userId);
+      placesList.append(currentCard);
     });
   })
   .catch((err) => {
@@ -101,7 +89,7 @@ function handleImgSubmit(evt) {
 
   newCardApi(newCardData)
     .then((res) => {
-      const newCard = createCard(res, handleDeleteCard, openCardFunc, handleLikeCard, /*allowDelete=*/ true);
+      const newCard = createCard(res, handleDeleteCard, openCardFunc, likeButtonClick, userId);
       placesList.prepend(newCard);  
       formAddCards.reset();
       closeModal(dialogNewCard);
@@ -220,29 +208,3 @@ function handleDeleteCard (cardElement, cardId) {
   cardForDelete = cardElement;
   openModal(dialogDeleteCard);
 };
-
-  // Ставим лайки
-  function handleLikeCard(cardId, cardLikeButton, cardLikeCount) {
-    const updateLikeCounter = (res) => { 
-      cardLikeCount.textContent = res.likes.length;
-    };
-    const isLikeActivated = downLike(cardLikeButton);
-    // обновляет количество лайков
-    if (isLikeActivated){
-      likeCardApi(cardId)
-        .then (updateLikeCounter);
-    } else {
-      dislikeCardApi(cardId)
-        .then (updateLikeCounter);
-    }
-  };
-  
-
-
-
-  
-
-
-
-
- 
