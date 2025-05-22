@@ -59,7 +59,17 @@
           maxlength="40" 
           required>
         <span class="popup__input-error name-input-error"></span>
-        <input class="popup__input" type="text" id="description-input"  name="description" placeholder="Занятие" minlength="2" maxlength="200" required>
+        <input 
+        class="popup__input" 
+        type="text" 
+        id="description-input"  
+        name="description"
+        pattern="^[a-zA-Zа-яА-ЯЁё \-]+$"
+        data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" 
+        placeholder="Занятие" 
+        minlength="2" 
+        maxlength="200" 
+        required>
         <span class="popup__input-error description-input-error"></span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>

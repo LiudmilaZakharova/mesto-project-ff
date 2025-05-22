@@ -1,10 +1,10 @@
 import "../pages/index.css";
 import { createCard, deleteCardFunc, likeButtonClick } from "./components/card.js";
-import { openModal, closeModal, savingButtonText, saveButtonText } from "./components/modal.js";
+import { openModal, closeModal } from "./components/modal.js";
 // import {initialCards} from './components/cards.js';
 import { validationConfig } from "./components/config.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
-import { profileData, initialCards, editProfileApi, newCardApi, deleteCardApi, likeCardApi, dislikeCardApi, editAvatarApi } from "./components/api.js";
+import { profileData, initialCards, editProfileApi, newCardApi, deleteCardApi, editAvatarApi } from "./components/api.js";
 
 const placesList = document.querySelector(".places__list");
 
@@ -93,13 +93,12 @@ function handleImgSubmit(evt) {
       placesList.prepend(newCard);  
       formAddCards.reset();
       closeModal(dialogNewCard);
-      clearValidation (formAddCards, validationConfig);
       saveButtonText(dialogNewCard);
     })
     .catch((err) => {
       console.log("Ошибка. Запрос не выполнен", err);
-      closeModal(dialogNewCard);
-      clearValidation (formAddCards, validationConfig);
+    })
+    .finally (() => {
       saveButtonText(dialogNewCard);
     });
 };
@@ -109,11 +108,13 @@ formAddCards.addEventListener('submit', handleImgSubmit);
 // слушатель на кнопке "добавить картинку"
 profileAddButton.addEventListener("click", () => {
   openModal(dialogNewCard);
+  clearValidation (formAddCards, validationConfig);
 });
 
 // открывает модалку редактирования аватара
 profileImgEditButton.addEventListener("click", () => {
   openModal(dialogAvatarEdit);
+  clearValidation(formEditAvatar, validationConfig);
 });
 
 // редактирование аватарки
@@ -123,16 +124,15 @@ function handleAvatarSubmit(evt) {
   const profileAvatarLink = {avatar: avatarLinkInput.value};
   editAvatarApi(profileAvatarLink)
   .then((res) => {
-     userAvatar.style.backgroundImage = `url(${res.avatar})`;
-     closeModal(dialogAvatarEdit);
-     saveButtonText(dialogAvatarEdit);
-     clearValidation(dialogAvatarEdit, validationConfig);
+      userAvatar.style.backgroundImage = `url(${res.avatar})`;
+      closeModal(dialogAvatarEdit);
+      saveButtonText(dialogAvatarEdit);
   })
   .catch((err) => {
       console.log("Ошибка. Запрос не выполнен", err);
-      closeModal(dialogAvatarEdit);
-      saveButtonText(dialogAvatarEdit);
-      clearValidation(dialogAvatarEdit, validationConfig);
+  })
+  .finally (() => {
+      saveButtonText(dialogNewCard);
   });
 };
 
@@ -158,8 +158,9 @@ function handleFormEditSubmit(evt) {
     })
     .catch((err) => {
       console.log("Ошибка. Запрос не выполнен", err);
-      closeModal(dialogEdit);
-      saveButtonText(dialogEdit);
+    })
+    .finally (() => {
+      saveButtonText(dialogNewCard);
     });
 };
 
@@ -188,7 +189,6 @@ popupList.forEach((popup) => {
 
 // Слушатель на подтверждение удаления карточки
 deleteCardButton.addEventListener("click", () => {
-  console.log("deleteCardApi(idCardForDelete)");
   deleteCardApi(idCardForDelete)
     .then(() => {
       deleteCardFunc(cardForDelete);
@@ -208,3 +208,11 @@ function handleDeleteCard (cardElement, cardId) {
   cardForDelete = cardElement;
   openModal(dialogDeleteCard);
 };
+
+const savingButtonText = (element) => { 
+  element.querySelector('.popup__button').textContent = "Сохранение..." 
+}; 
+
+const saveButtonText = (element) => { 
+  element.querySelector('.popup__button').textContent = "Сохранить" 
+}; 

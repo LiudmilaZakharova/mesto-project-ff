@@ -10,17 +10,9 @@ function closeByEsc(evt) {
   }
 };
 
-const savingButtonText = (element) => {
-element.querySelector('.popup__button').textContent = "Сохранение..."
-};
-
-const saveButtonText = (element) => {
-element.querySelector('.popup__button').textContent = "Сохранить"
-};
-
 function closeModal(element) {
   element.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', closeByEsc);
 };
 
-export {openModal, closeModal, savingButtonText, saveButtonText}
+export {openModal, closeModal}

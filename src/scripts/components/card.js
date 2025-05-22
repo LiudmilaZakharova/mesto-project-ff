@@ -52,7 +52,7 @@ function likeButtonClick(cardId, cardLikeButton, cardLikeCount) {
     });
 };
 
-// Функция удаления карты с формы
+// Функция удаления карточки с формы
 function deleteCardFunc (cardElement) {
   cardElement.remove();
 };
